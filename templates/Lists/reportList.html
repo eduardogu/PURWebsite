@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block mainContent %}
+    <div class="panel-heading">
+        <h1>Reports</h1>
+    </div>
+    <div class="container-fluid" >
+        <div class ="panel-body">
+
+        <div class="btn-group align-right" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="checkbox" name="options" id="option1" autocomplete="off" checked> All
+            </label>
+            <label class="btn btn-primary">
+                <input type="checkbox" name="options" id="option2" autocomplete="off"> Pending
+            </label>
+            <label class="btn btn-primary">
+                <input type="checkbox" name="options" id="option3" autocomplete="off"> Opened
+            </label>
+            <label class="btn btn-primary">
+                <input type="checkbox" name="options" id="option3" autocomplete="off"> Submitted
+            </label>
+            <label class="btn btn-primary">
+                <input type="checkbox" name="options" id="option3" autocomplete="off"> On Hold
+            </label>
+        </div>
+        </div>
+    </div>
+
+    <div class="container">
+    <div class="row col-md-9 custyle">
+    <table class="table table-striped custab">
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th><input style="width: 100px" class="form-control" type="text" placeholder="Report #"/></th>
+            <th><input class="form-control" type="text" placeholder="Firm"/></th>
+            <th><input style="width: 140px" class="form-control" placeholder="Permit #"/></th>
+            <th>
+            <input type="text" class="form-control" name="daterange" placeholder="Date Range"/>
+
+            <script type="text/javascript">
+            $(function() {
+                $('input[name="daterange"]').daterangepicker();
+            });
+            </script>
+            </th>
+            <th>
+                <a href="create/" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Create</a>            </th>
+            </tr>
+    </thead>
+        {% for report in object_list %}
+            <tr>
+                <td>
+                <div
+                    {% if report.status == 'sb' %}
+                        class="btn btn-secondary" style="background: #b13ffd; color: #ffffff"><span class="glyphicon glyphicon-time">
+                    {% elif report.status == 're' %}
+                        class=" btn btn-info "><span class="glyphicon glyphicon-open-file">
+                    {% elif report.status == 'ap' %}
+                        class="btn btn-success "><span class="glyphicon glyphicon-check">
+                    {% elif report.status == 'nr' %}
+                        class="btn btn-danger "><span class="glyphicon glyphicon-remove">
+                    {% endif %}
+                </span></div>
+                </td>
+                <td>{{ report.pk}}</td>
+                <td>{{ report.firm}}</td>
+                <td>{{ report.permit.permit_num }}</td>
+                <td>{{ report.dateUpdate}}</td>
+                <td class="text-center"><a class='btn btn-info btn-xs' href="{{ report.pk }}"><span class="glyphicon glyphicon-paperclip"></span> Review</a>
+            </tr>
+        {% empty %}
+                <h3>There are no Reports to show!</h3>
+        {% endfor %}
+    </table>
+    </div>
+</div>
+{% endblock %}

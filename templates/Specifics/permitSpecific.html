@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block mainContent %}
+<div class="panel-heading">
+    Permit:  {{ permit}}
+</div>
+    <div class="panel-body">
+        Permit #: {{ permit.permit_num }}
+        Permit Type: {{ permit.permit_type }}
+    </div>
+{% endblock %}

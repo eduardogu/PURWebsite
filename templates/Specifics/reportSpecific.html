@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block headBlock %}
+<style>
+        body{margin:0px;}
+    .btn-circle {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      padding: 6px 0;
+      font-size: 12px;
+      line-height: 1.428571429;
+      border-radius: 15px;
+    }
+    .btn-circle.btn-lg {
+      width: 50px;
+      height: 50px;
+      padding: 10px 16px;
+      font-size: 18px;
+      line-height: 1.33;
+      border-radius: 25px;
+    }
+    .btn-circle.btn-xl {
+      width: 70px;
+      height: 70px;
+      padding: 10px 16px;
+      font-size: 24px;
+      line-height: 1.33;
+      border-radius: 35px;
+    }
+
+    textarea {
+        resize: none;
+    }
+    .clickable
+    {
+        cursor: pointer;
+    }
+
+    .clickable .glyphicon
+    {
+        background: rgba(0, 0, 0, 0.15);
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 4px
+    }
+
+    #row-panel
+    {
+        margin-top: 20px;
+    }
+
+    .panel-heading span
+    {
+        margin-top: -23px;
+        font-size: 15px;
+        margin-right: -9px;
+    }
+    a.clickable { color: inherit; }
+    a.clickable:hover { text-decoration:none; }
+</style>
+
+    <script>
+    $('#editable').click(function(){
+    var name = $(this).text();
+    $(this).html('');
+    $('<input></input>')
+        .attr({
+            'type': 'text',
+            'name': 'fname',
+            'id': 'txt_editable',
+            'size': '30',
+            'value': name
+        })
+        .appendTo('#editable');
+    $('#txt_editable').focus();
+});
+
+$(document).on('blur','#txt_editable', function(){
+    var name = $(this).val();
+    //alert('Make an AJAX call and pass this parameter >> name=' + name);
+    $('#editable').text(name);
+});
+    </script>
+
+{% endblock %}
+
+{% block mainContent %}
+
+    <!--<form action="update/" id="firmForm"> -->
+    <div class="panel-heading">
+        <h4>Report #: {{ report.pk }}</h4>
+    </div>
+    <div class="container">
+        <div class="row" id="row-panel">
+            <div class="col-md-6" >
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="/firmList/{{ report.firm.firm_id }}">{{ report.firm }}</a></h3>
+                    </div>
+                    <div class="panel-body">
+                        <table>
+                            <tr><td><b>{{ report.firm.firm_address }}</b></td></tr>
+                            <tr><td>{{ report.firm.firm_city }}</td></tr>
+                            <tr><td>{{ report.firm.firm_zip }}</td></tr>
+                            <tr><td><i>{{ report.firm.firm_phone }}</i></td></tr>
+                            <tr><td> Permit #: <a href="#"><u>{{ report.firm.firm_id }}</u></a></td></tr>
+                        </table>
+                    </div>
+                </div>
+            <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Application</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table>
+                            <tr><td><b>Time of Application: </b><div id="editable">{{ report.date_of_application }}, {{ report.time_of_application }}</div></td></tr>
+                            <tr><td><b>Number of Applications: </b><div>{{ report.number_of_applications }}</div></td></tr>
+                            <tr><td><b>Method of Application: </b><div> {{ report.method_of_application }} </div></td></tr>
+                            <tr><td><b>Total Application: </b> <div>{{report.total_application}} {{ report.product_measurement }}</div></td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-info" id="row-panel">
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6" ><h5 class="panel-title"><b>Filed:</b> {{ report.dateUpdate }}</h5></div>
+                    <div class="col-md-6 pull-right"><h5 class="panel-title"><b>Status:</b> <button type="button"
+                        {% if report.status == 'sb' %}
+                            class="btn-secondary">Pending
+                        {% elif report.status == 're' %}
+                            class="btn-info">In Review
+                        {% elif report.status == 'ap' %}
+                            class="btn-success">Approved
+                        {% elif report.status == 'nr' %}
+                            class="btn-warning">Errors
+                        {% endif %}
+                    </button></h5></div>
+                </div>
+            </div>
+
+        </div>
+            <div class="panel panel-success">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="panel-title"><b>Creator:</b> {{ report.creator }}</h4>
+                        </div>
+                        <div class="col-md-4">
+                            <h4 class="panel-title"><b>Reviewer:</b> {{ report.reviewer }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 20px">
+                <div class="col-md-6" style="margin-top: 10px">
+                    <a href="#" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-refresh"></span> Update</a>
+                </div>
+            <div class="pull-right" style="margin-top: 10px; margin-right: 20px">
+                <a href="approve/" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-ok"></span> Approve</a>
+                <a href="reject/" class="btn btn-lg btn-danger"><span class="glyphicon glyphicon-remove"></span> Reject </a>
+                </div>
+            </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Site</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col">
+                            <div><b>{{ view.getZone.zone_id }}</b></div>
+                            <div>
+                            {{ view.getZone.zone_bm}}
+                            {{ view.getZone.zone_township }}
+                            {{ view.getZone.zone_township_dir }}
+                            {{ view.getZone.zone_range }}
+                            {{ view.getZone.zone_range_dir }}
+                            {{ view.getZone.zne_section }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Pesticide</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col">
+                            <div><b>{{ view.getPesticide }}</b></div>
+                            <div>{{ view.getPesticide.pesticide_id }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h5 class="panel-title">Comments: </h5>
+                    </div>
+                    <div class="panel-body">
+                        <!-- </form> -->
+                        <textarea form="firmForm" rows="12" cols="30" maxlength="400" placeholder="Max: 400 Characters"></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
