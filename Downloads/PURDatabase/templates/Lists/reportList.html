@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block headBlock %}
+
+{% endblock %}
+
+{% block mainContent %}
+
+    <div class="panel-heading">
+        <h1>Reports</h1>
+    </div>
+    <div class="container-fluid" >
+        <div class ="panel-body">
+            <div class="btn-group align-right" data-toggle="">
+                <label class="btn btn-primary">
+                    <input  class="filterStatus" type="checkbox" id="showPending" autocomplete="off" > Pending
+                </label>
+                <label class="btn btn-primary">
+                    <input class="filterStatus" type="checkbox" id="showOpened" autocomplete="off" > Opened
+                </label>
+                <label class="btn btn-primary">
+                    <input class="filterStatus" id="showSubmit" type="checkbox" autocomplete="off" > Submitted
+                </label>
+                <label class="btn btn-primary">
+                    <input class="filterStatus" id="showOnHold" type="checkbox" autocomplete="off" > On Hold
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-body filterable">
+    <table class="table table-striped" id="reportTable">
+
+    <thead>
+        <tr class=filters>
+            <th>Status</th>
+            <th><input id="idFilter" style="width: 100px" class="form-control" type="text" placeholder="Report #"/></th>
+            <th><input id="firmFilter" class="form-control" type="text" placeholder="Firm"/></th>
+            <th><input id="permitFilter" style="width: 140px" class="form-control" placeholder="Permit #"/></th>
+            <th>
+            <input type="text" class="form-control" name="daterange" placeholder="Date Range"/>
+            <script type="text/javascript">
+            $(function() {
+                $('input[name="daterange"]').daterangepicker();
+            });
+            </script>
+            </th>
+            <th>
+                <a href="create/" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Create</a>
+            </th>
+        </tr>
+    </thead>
+        {% for report in object_list %}
+
+            <tr class="{{ report.status }}">
+                <td>
+                 <div
+                        {% if report.status == 'sb' %}
+                            class="btn btn-secondary btn-xs center-block" style="background: #b13ffd; color: #ffffff"><span class="glyphicon glyphicon-time">
+                        {% elif report.status == 're' %}
+                            class=" btn btn-info btn-xs center-block"><span class="glyphicon glyphicon-open-file">
+                        {% elif report.status == 'ap' %}
+                            class="btn btn-success btn-xs center-block"><span class="glyphicon glyphicon-check">
+                        {% elif report.status == 'nr' %}
+                            class="btn btn-danger btn-xs center-block"><span class="glyphicon glyphicon-remove">
+                        {% endif %}
+                    </span>
+                </div>
+                </td>
+                <td>{{ report.pk}}</td>
+                <td>{{ report.firm}}</td>
+                <td>{{ report.permit.permit_num }}</td>
+                <td>{{ report.dateUpdate}}</td>
+                <td class="text-center"><a class='btn btn-info btn-xs' href="{{ report.pk }}"><span class="glyphicon glyphicon-paperclip"></span> Review</a>
+            </tr>
+            {% if forloop.last %}
+                <script>
+                    $("document").ready(function(){
+                        $("#showPending").on('change',function(){
+                            if(this.checked)
+                                $(".sb").hide();
+                            else
+                                $(".sb").show();
+                        });
+                        $("#showOnHold").on('change',function(){
+                            if(this.checked)
+                                $(".nr").hide();
+                            else
+                                $(".nr").show();
+                        });
+                        $("#showSubmit").on('change',function(){
+                            if(this.checked)
+                                $(".ap").hide();
+                            else
+                                $(".ap").show();
+                        });
+                        $("#showOpened").on('change',function(){
+                            if(this.checked)
+                                $(".re").hide();
+                            else
+                                $(".re").show();
+                        });
+
+                        $('.filterable .filters input').keyup(function(e){
+                            var code = e.keyCode || e.which;
+                            if (code == '9') return;
+                            /* Useful DOM data and selectors */
+                            var $input = $(this),
+                            inputContent = $input.val().toLowerCase(),
+                            $panel = $input.parents('.filterable'),
+                            column = $panel.find('.filters th').index($input.parents('th')),
+                            $table = $panel.find('.table'),
+                            $rows = $table.find('tbody tr');
+                            /* Dirtiest filter function ever ;) */
+                            var $filteredRows = $rows.filter(function(){
+                                var value = $(this).find('td').eq(column).text().toLowerCase();
+                                return value.indexOf(inputContent) === -1;
+                            });
+                            /* Clean previous no-result if exist */
+                            $table.find('tbody .no-result').remove();
+                            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+                            $rows.show();
+                            $filteredRows.hide();
+                            /* Prepend no-result row if all rows are filtered */
+                            if ($filteredRows.length === $rows.length) {
+                                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
+                            }
+                        });
+                    });
+                </script>
+
+            {% endif %}
+        {% empty %}
+                <h3>There are no Reports to show!</h3>
+        {% endfor %}
+    </table>
+    </div>
+
+{% endblock %}

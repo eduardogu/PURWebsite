@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block mainContent %}
+	<div class="panel-heading">
+        <div class="row">
+            <div class="col-md-10"><h4>{{zone.firm}} - {{zone.zone_id}}</h4></div>
+            <div class="col-md-2"><h4>{{ zone.generateMTRS }}</h4></div>
+        </div>
+	</div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Reports</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-fixed" style="height: 500px; overflow-y: auto">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>#</th>
+                                    <th>Reviewer</th>
+                                    <th>Creator</th>
+                                    <th>Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for report in zone.report_set.all %}
+                                    <tr>
+                                        <td>
+                                            <div
+                                                {% if report.status == 'sb' %}
+                                                    class="btn btn-secondary btn-xs" style="background: #b13ffd; color: #ffffff">
+                                                    <span class="glyphicon glyphicon-time">
+                                                {% elif report.status == 're' %}
+                                                    class=" btn btn-info btn-xs "><span class="glyphicon glyphicon-open-file">
+                                                {% elif report.status == 'ap' %}
+                                                    class="btn btn-success btn-xs"><span class="glyphicon glyphicon-check">
+                                                {% elif report.status == 'nr' %}
+                                                    class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove">
+                                                {% endif %}
+                                            </span></div>
+                                        </td>
+                                        <td>{{ report.pk }}</td>
+                                        <td>{{ report.reviewer }}</td>
+                                        <td>{{ report.creator }}</td>
+                                        <td>{{ report.dateUpdate.date }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <td><i>There are no reports associated with this site</i></td>
+                                {% endfor %}
+                             </tbody>
+                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="panel panel-info panel-fixed" style="height: 220px">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Map</h3>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Commodities</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-fixed" style="height: 260px; overflow-y: auto">
+                            <thead>
+                                <tr>
+                                    <th>Commodity</th>
+                                    <th>Code</th>
+                                    <th>Qualifier</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for commodity in zone.commodity_set.all %}
+                                    <tr>
+                                        <td>{{ commodity.commodity_name }}</td>
+                                        <td>{{ commodity.commodity_code }}</td>
+                                        <td>{{ commodity.qualifier }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <td><i>No commodities associated with this site.</i></td>
+                                {% endfor %}
+                            </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

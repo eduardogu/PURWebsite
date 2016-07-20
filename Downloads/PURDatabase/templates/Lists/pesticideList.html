@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block mainContent %}
+
+    <div class="panel-heading">
+        <h1>Pesticide</h1>
+    </div>
+    <div class="container-fluid" >
+        <div class ="panel-body">
+
+        <div class="btn-group align-right" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked> All
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="options" id="option2" autocomplete="off"> Active
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="options" id="option3" autocomplete="off"> Inactive
+            </label>
+        </div>
+
+            <label class="col-md-offset-4">Valid Between: </label>
+            <input type="text" name="daterange" value="01/01/2016 - 06/23/2016"/>
+
+            <script type="text/javascript">
+            $(function() {
+                $('input[name="daterange"]').daterangepicker();
+            });
+            </script>
+        </div>
+    </div>
+
+    <div class="container">
+    <div class="row col-md-9 center">
+    <table class="table table-striped custab">
+    <thead>
+        <tr>
+            <th>Label #</th>
+            <th>Name</th>
+            <th>Action</th>
+
+            <th class="text-center"></th>
+        </tr>
+    </thead>
+        {% for pesticide in object_list %}
+            <tr>
+                <td>{{ pesticide.pesticide_id }}</td>
+                <td>{{ pesticide.pesticide_name }}</td>
+                <td>
+                    <td class="text-center"><a class='btn btn-info btn-xs' href="{{pesticide.pk}}/">
+                    <span class="glyphicon glyphicon-glass"></span> View</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="/pesticideList?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="/pesticideList?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+    </table>
+    </div>
+</div>
+
+
+{% endblock %}

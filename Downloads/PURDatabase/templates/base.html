@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static "PUR/websiteStyle.css" %}"/>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <script type="text/javascript" src="jquery.bootpag.js"></script>
+    {% block headBlock %}
+
+    {% endblock %}
+
+</head>
+<body>
+    <div class="container wrapper">
+        <nav class="navbar navbar-inverse" role="navigation" style="margin-top:20px;">
+            <a class="navbar-brand" href="/home/">Home</a>
+        <ul class="nav navbar-nav navbar-header pull-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span>{{user.username}}</a></li>
+            <li><a href="/logout/"><span class="glyphicon glyphicon-log-in"></span>Sign Out</a></li>
+        </ul>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-1">
+             <div class="panel panel-primary">
+                 {% block mainContent %}
+
+                 {% endblock %}
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4>Lists</h4>
+                </div>
+                <ul>
+                    <list>
+                        <h5><a href="/reportList/">Reports</a></h5>
+                        <h5><a href="/firmList/">Firms</a></h5>
+                        <h5><a href="/permitList/">Permits</a></h5>
+                        <h5><a href="/pesticideList/">Pesticides</a></h5>
+                        <h5><a href="/siteList/">Sites</a></h5></h5>
+                        <h5><a href="/reportList/"></a>
+                    </list>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<footer>
+    <div class="footer">
+        <div class="container">
+            <div class="panel panel-info">
+        <div class="panel-body text-center">
+        <div>
+            <h5>Contact: support@myemail.com</h5>
+        </div>
+        <div>
+            <h6>Copyright and what not</h6>
+        </div>
+        </div>
+                </div>
+        </div>
+    </div>
+</footer>
+</html>

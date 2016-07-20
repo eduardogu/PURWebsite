@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+
+{% block headBlock %}
+    <link href="path/to/css/dependent-dropdown.min.css" media="all" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block mainContent %}
+
+    <div class="panel-heading">
+        <h4><b>Create Report</b></h4>
+    </div>
+    <div class="panel-body">
+    <form action="" method="get">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Info</h3>
+                    </div>
+                    <div class="panel-body">
+                    <form action="" method="get" accept-charset="utf-8">
+                        <label>Firm: </label>
+                        <input list="firms" id="firmList" class="form-control" value="Select A Firm">
+                            <datalist id="firms">
+                                <option id="thing">Select A Firm</option>
+                                {% for firm in view.getFirms %}
+                                    <option id="firm_{{ firm.pk }}">{{ firm.firm_name }} *({{ firm.pk }})*</option>
+                                {% empty %}
+                                    <p>lol wat</p>
+                                {% endfor %}
+                            </datalist>
+                        <label>Sites: </label>
+                        <input list="sites" class="form-control" disabled id="siteList">
+                            <datalist id="sites">
+                                <option>Select a Site</option>
+                            </datalist>
+                        <label>Pesticides: </label>
+                        <input list="pesticides" id="pesticideList" class="form-control">
+                            <datalist id="pesticides">
+                                {% for pesticide in view.getPesticides %}
+                                    <option value="{{ pesticide.pesticide_name }} *({{ pesticide.pk }})*"></option>
+                                {% empty %}
+                                    <p>lol wat</p>
+                                {% endfor %}
+                            </datalist>
+                        </form>
+                        <script>
+                            $("document").ready(function(){
+                                function getPk(option){
+                                            var num="";
+                                            var bool=false;
+                                            for(var i = 0; i < option.length - 2; ++i){
+                                                if(bool)
+                                                    num+=option[i];
+                                                if((option[i]=='*')&&(option[i+1] = '(')) {
+                                                    bool = true;
+                                                    ++i
+                                                }
+                                            }
+                                            return num;
+                                }
+                                $("#firmList").on('change', function(){
+                                    var firm = $(this).val();
+                                    window.alert(firm);
+                                    if((firm == "Select A Firm")||(firm == ""))
+                                        $("#siteList").prop("disabled", true);
+                                    else {
+
+                                        var url = "/firm/" + getPk(firm) + "/json_sites";
+                                        window.alert(url);
+                                        $.getJSON(url, function(sites){
+                                            var options = '<option>Select a site</option>';
+                                            for (var i = 0; i < sites.length; i++) {
+                                                options += '<option value="' + sites[i].fields['zone_id']
+                                                        +' *('+sites[i].pk + ')*' + '">' + '</option>';
+                                            }
+                                            $("#sites").html(options);
+                                            $("#sites option:first").attr('selected','selected');
+                                            $("#siteList").prop("disabled", false)
+
+                                        });
+                                    }
+                                });
+                                $("#siteList").change(function(vent) {
+                                    /*
+                                        Populate Info from Site
+                                    */
+                                });
+
+                                $("#pesticideList").change(function(){
+                                    /*
+                                        Populate info from Pesticide
+                                     */
+                                });
+
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Report</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Firm</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <label>Name: </label>
+                                            <input id="firm_name" type="text" class="form-control">
+                                        <label>Address: </label>
+                                            <input id="firm_address" type="text" class="form-control">
+                                        <label>Phone #: </label>
+                                            <input id="firm_phone" type="text" class=" col-md-9 form-control">
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <label>City: </label>
+                                                    <input id="firm_city" type="text" class="form-control">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label>Zip: </label>
+                                                    <input id="firm_zip" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <label>County</label>
+                                                    <input id="county_name" type="text" class="form-control">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Code #</label>
+                                                    <input id="county_code" type="number" class="form-control">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Site</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <label>Site ID: </label>
+                                            <input type="text" class="form-control" id="zone_id">
+                                        <label>Acres: </label>
+                                            <input type="number" class="form-control" id="zone_acreage">
+                                        <label>Commodity: </label>
+                                            <input list="commodities" class="form-control">
+                                                <datalist id="commodities">
+                                                    <option>Crop Rotational</option>
+                                                </datalist>
+                                        <label>MTRS: </label>
+                                        <div class="row" style="margin-top:0px">
+                                            <div class="col-md-3" style="margin-right: -27px">
+                                                <input type="radio" name="township">N<br>
+                                                <input type="radio" name="township">S<br>
+                                            </div>
+                                            <div class="col-md-3" style="margin-top: 5px;"><input type="text" id="zone_township" class="form-control"></div>
+
+                                            <div class="col-md-3" style="margin-right: -27px;">
+                                                <input type="radio" name="range">E<br>
+                                                <input type="radio" name="range">W<br>
+                                            </div>
+                                            <div class="col-md-3" style="margin-top: 6px;"><input type="text" id="zone_range" class="form-control"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                B&M:
+                                            <input list="BM" class="form-control">
+                                                <datalist id="BM">
+                                                    <option>S</option>
+                                                    <option>M</option>
+                                                    <option>H</option>
+                                                </datalist>
+                                            </div>
+                                            <div class="col-md-6">
+                                                Section: <input type="text" class="form-control" id="zone_section">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Pesticide</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <label>Name: </label>
+                                            <input type="text" class="form-control" id="pesticide_name">
+                                        <label>Manufacturer: </label>
+                                            <input type="text" class="form-control" id="manufacturer">
+                                        <label>Label #: </label>
+                                            <input type="text" class="form-control" id="pesticide_id">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Application</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <label>Total: </label>
+                                                <input type="number" class="form-control" id="total_application">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Units: </label>
+                                                <input list="units" class="form-control" id="product_measurement">
+                                                <datalist id="units">
+                                                    <option>LB</option>
+                                                    <option>OZ</option>
+                                                    <option>PT</option>
+                                                    <option>QT</option>
+                                                    <option>GA</option>
+                                                </datalist>
+                                            </div>
+                                        </div>
+                                        <label>Acres Treated: </label>
+                                            <input type="number" class="form-control" id="acreage-treated">
+                                        <div class=row style="margin-top:10px; margin-bottom:10px;">
+                                            <div class="col-md-6">
+                                                <label>Method: </label><br>
+                                                <input type="radio" name="method_of_application">Ground<br>
+                                                <input type="radio" name="method_of_application">Air<br>
+                                                <input type="radio" name="method_of_application">Fume<br>
+                                                <input type="radio" name="method_of_application">Other<br>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Pre-Plant: </label>
+                                                <input type="checkbox" id="application_preplant"><br>
+                                                <label>Days Reentry: </label>
+                                                    <input type="number" class="form-control" id="application_daysreentry">
+                                            </div>
+                                        </div>
+                                        <label>Date/Time of Application: </label>
+                                            <input type="date" class="form-control">
+                                            <input type="time" class="form-control">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="panel-footer">
+        <a href="#" class="btn btn-lg btn-primary">Create Report <span class="glyphicon glyphicon-plus-sign"></span> </a>
+    </div>
+{% endblock %}

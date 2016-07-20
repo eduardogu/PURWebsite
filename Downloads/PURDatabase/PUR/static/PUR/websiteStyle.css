@@ -1,0 +1,9 @@
+.navbar-custom {
+    color: #ffea00;
+    background-color: #33f652;
+    font-color: #fffdfd;
+}
+
+body{
+    background: white url(images/crossword.png);
+}
