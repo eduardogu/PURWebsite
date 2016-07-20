@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block mainContent %}
+    <div class="panel-heading panel-success">
+        <h4>Welcome, {{ user.username }}! </h4>
+    </div>
+    <div class="panel-body panel-default">
+    <h2>Dashborad</h2>
+                    <div class="panel-group">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapse1">Pending Review</a>
+                        </h4>
+                    </div>
+                <div id="collapse1" class="panel-collapse collapse">
+                    <div class="panel-body">
+                    <table class="table table-fixed">
+                      <thead>
+                        <tr>
+                            <th class="col-xs-3">Firm</th>
+                            <th class="col-xs-2">Permit</th>
+                            <th class="col-xs-2">Creator</th>
+                            <th class="col-xs-3">Updated</th>
+                            <th class="col-xs-2">Review</th>
+                        </tr>
+                      </thead>
+                        {% for report in view.reportsPending %}
+                            <tr>
+                                <td class="col-xs-3">{{ report.firm }}</td>
+                                <td class="col-xs-2">{{ report.permit.permit_num }}</td>
+                                <td class="col-xs-2">{{ report.creator }}</td>
+                                <td class="col-xs-3">{{ report.date}}</td>
+                                <td class="col-xs-2">
+                                    <a href="/reportList/{{ report.pk }}/" class="btn btn-xs btn-info">
+                                        <span class="glyphicon glyphicon-paperclip"></span> Review</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <h5>No Reports to show</h5>
+                        {% endfor %}
+                    </table>
+                    </div>
+                        <div class="panel-footer"><a href="/reportList/">View More</a></div>
+                        </div>
+                          </div>
+                        </div>
+                        <div class="panel-group">
+                          <div class="panel panel-warning">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse2">Unfinished</a>
+                              </h4>
+                            </div>
+                            <div id="collapse2" class="panel-collapse collapse">
+                              <div class="panel-body">
+                                  <table class="table table-fixed">
+                                      <thead>
+                                        <tr>
+                                            <th class="col-xs-3">Firm</th>
+                                            <th class="col-xs-2">Permit</th>
+                                            <th class="col-xs-2">Creator</th>
+                                            <th class="col-xs-3">Updated</th>
+                                            <th class="col-xs-2">Review</th>
+                                        </tr>
+                                      </thead>
+                                        {% for report in view.reportsReviewed %}
+                                            <tr>
+                                                <td class="col-xs-3">{{ report.firm }}</td>
+                                                <td class="col-xs-2">{{ report.permit.permit_num }}</td>
+                                                <td class="col-xs-2">{{ report.creator }}</td>
+                                                <td class="col-xs-3">{{ report.date}}</td>
+                                                <td class="col-xs-2">
+                                                    <a href="/reportList/{{ report.pk }}/" class="btn btn-xs btn-info">
+                                                        <span class="glyphicon glyphicon-paperclip"></span> Review</a>
+                                                </td>
+                                            </tr>
+                                        {% empty %}
+                                            <h5>No Reports to show</h5>
+                                        {% endfor %}
+                                    </table>
+                              </div>
+                              <div class="panel-footer"><a href="/reportList/">View More</a></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel-group">
+                          <div class="panel panel-success">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse3">Submitted</a>
+                              </h4>
+                            </div>
+                            <div id="collapse3" class="panel-collapse collapse">
+                              <div class="panel-body">
+                                  <table class="table table-fixed">
+                                      <thead>
+                                        <tr>
+                                            <th class="col-xs-3">Firm</th>
+                                            <th class="col-xs-2">Permit</th>
+                                            <th class="col-xs-2">Creator</th>
+                                            <th class="col-xs-3">Updated</th>
+                                            <th class="col-xs-2">Review</th>
+                                        </tr>
+                                      </thead>
+                                        {% for report in view.reportsSubmitted %}
+                                            <tr>
+                                                <td class="col-xs-3">{{ report.firm }}</td>
+                                                <td class="col-xs-2">{{ report.permit.permit_num }}</td>
+                                                <td class="col-xs-2">{{ report.creator }}</td>
+                                                <td class="col-xs-3">{{ report.date}}</td>
+                                                <td class="col-xs-2">
+                                                    <a href="/reportList/{{ report.pk }}/" class="btn btn-xs btn-info">
+                                                        <span class="glyphicon glyphicon-paperclip"></span> Review</a>
+                                                </td>
+                                            </tr>
+                                        {% empty %}
+                                            <h5>No Reports to show</h5>
+                                        {% endfor %}
+                                    </table>
+                              </div>
+                              <div class="panel-footer"><a href="/reportList/">View More</a></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel-group">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse4">Awaiting Resubmission</a>
+                              </h4>
+                            </div>
+                            <div id="collapse4" class="panel-collapse collapse">
+                              <div class="panel-body">
+                                  <table class="table table-fixed">
+                                      <thead>
+                                        <tr>
+                                            <th class="col-xs-3">Firm</th>
+                                            <th class="col-xs-2">Permit</th>
+                                            <th class="col-xs-2">Creator</th>
+                                            <th class="col-xs-3">Updated</th>
+                                            <th class="col-xs-2">Review</th>
+                                        </tr>
+                                      </thead>
+                                        {% for report in view.reportsOnHold %}
+                                            <tr>
+                                                <td class="col-xs-3">{{ report.firm }}</td>
+                                                <td class="col-xs-2">{{ report.permit.permit_num }}</td>
+                                                <td class="col-xs-2">{{ report.creator }}</td>
+                                                <td class="col-xs-3">{{ report.date}}</td>
+                                                <td class="col-xs-2">
+                                                    <a href="/reportList/{{ report.pk }}/" class="btn btn-xs btn-info">
+                                                        <span class="glyphicon glyphicon-paperclip"></span> Review</a>
+                                                </td>
+                                            </tr>
+                                        {% empty %}
+                                            <h5>No Reports to show</h5>
+                                        {% endfor %}
+                                    </table>
+                              </div>
+                              <div class="panel-footer"><a href="/reportList/">View More</a></div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+{% endblock %}
+
+{% block sideContent %}
+
+
+
+{% endblock %}

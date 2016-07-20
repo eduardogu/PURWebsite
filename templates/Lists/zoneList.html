@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block mainContent %}
+
+    <div class="panel-heading">
+        <h1>Permits</h1>
+    </div>
+    <div class="container-fluid" >
+        <div class ="panel-body">
+
+        <div class="btn-group align-right" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked> All
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="options" id="option2" autocomplete="off"> Individual
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="options" id="option3" autocomplete="off"> Businesses
+            </label>
+        </div>
+
+            <label class="col-md-offset-4">Registered Between: </label>
+            <input type="text" name="daterange" value="01/01/2016 - 06/23/2016"/>
+
+            <script type="text/javascript">
+            $(function() {
+                $('input[name="daterange"]').daterangepicker();
+            });
+            </script>
+        </div>
+    </div>
+
+    <div class="container">
+    <div class="row col-md-9 custyle">
+    <table class="table table-striped custab">
+    <thead>
+        <tr>
+            <th>Site #</th>
+            <th>Name</th>
+            <th>MTRS</th>
+            <th class="text-center"></th>
+        </tr>
+    </thead>
+        {% for zone in object_list %}
+            <tr>
+                <td>{{ zone.zone_id}}</td>
+                <td>{{ zone.firm.firm_name }}</td>
+                <td>{{ zone.generateMTRS}}</td>
+                <td class="text-center"><a class='btn btn-info btn-xs' href="{{ zone.pk }}/"><span class="glyphicon glyphicon-glass"></span> View</a>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+</div>
+
+{% endblock %}
